@@ -9,6 +9,12 @@ public class Death : MonoBehaviour
 
     public void HitDeathPart()
     {
-        GameManager.singleton.RestartLevel();
+
+        if (GameManager.singleton.score == 0)
+        {
+            return;
+        }
+        //GameManager.singleton.RestartLevel();
+        GameManager.singleton.ShowGameOver();
     }
 }

@@ -11,7 +11,14 @@ public class BallController : MonoBehaviour
     private void Awake()
     {
         startPos = transform.position;
+
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -30,7 +37,7 @@ public class BallController : MonoBehaviour
         rb.AddForce(Vector3.up * impulseForce , ForceMode.Impulse);
 
         denyNextCollision = true;
-        Invoke("allowCollision", .2f);
+        Invoke("allowCollision", .18f);
 
         //GameManager.singleton.AddScore(1);
         //Debug.Log(GameManager.singleton.score);

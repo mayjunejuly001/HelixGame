@@ -1,39 +1,52 @@
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager singleton;
+
     public int best;
     public int score;
-
     public int currentLevel = 0;
 
-
-    public static GameManager singleton;
+    [Header("UI")]
+    public GameObject gameOverPanel;
+    public GameObject gameUI;
+    public GameObject Helix;
+    public GameObject ball;
+    public TMP_Text finalScoreText;
+    public TMP_Text bestScoreText;
 
     private void Awake()
     {
         if (singleton == null)
         {
             singleton = this;
-        }else if (singleton != this)
+        }
+        else if (singleton != this)
         {
             Destroy(gameObject);
         }
 
-        best = PlayerPrefs.GetInt("HighScore");
+        best = PlayerPrefs.GetInt("BestScore");
     }
 
     public void NextLevel()
     {
-        Debug.Log("NextLlevel Called");
+        Debug.Log("NextLevel Called");
     }
 
     public void RestartLevel()
     {
-        Debug.Log("GameOver");
-        singleton.score = 0;
-        FindAnyObjectByType<BallController>().ResetBall();
-        //reload
+        Debug.Log("Restart Level");
+
+        score = 0;
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void AddScore(int scoreToAdd)
@@ -43,9 +56,21 @@ public class GameManager : MonoBehaviour
         if (score > best)
         {
             best = score;
-
-            PlayerPrefs.SetInt("HighScore" , score);
+            PlayerPrefs.SetInt("BestScore", best);
         }
     }
 
+    public void ShowGameOver()
+    {
+        Time.timeScale = 0f;
+
+        finalScoreText.text = "Score: " + score;
+        bestScoreText.text = "Best: " + best;
+        ball.SetActive(false);
+        Helix.SetActive(false);
+        gameUI.SetActive(false);
+        gameOverPanel.SetActive(true);
+    }
+
+    
 }
